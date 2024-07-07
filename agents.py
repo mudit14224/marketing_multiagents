@@ -4,11 +4,10 @@ from crewai_tools import SerperDevTool, ScrapeWebsiteTool, WebsiteSearchTool
 
 
 class MarketingAgents: 
-    def __init__(self, url):
-        self.url = url
-        self.serper_tool = SerperDevTool()
-        self.scrape_tool = ScrapeWebsiteTool(website_url=self.url)
-        self.website_search_rag_tool = WebsiteSearchTool()
+    def __init__(self, serper_tool, scrape_tool, website_search_rag_tool):
+        self.serper_tool = serper_tool
+        self.scrape_tool = scrape_tool
+        self.website_search_rag_tool = website_search_rag_tool
 
     def create_query_agents(self):
         # Information Specialist
@@ -44,15 +43,16 @@ class MarketingAgents:
 
         return information_specialist, search_query_generator, consolidator
 
-    # Researcher Agent function
-    def create_researcher_agent(self, query):
-        return Agent(
-            role='Internet Researcher',
-            goal=f'Find similar healthcare provider companies using the query: {query}',
-            backstory="""You work in the marketing team of a digital healthcare company.
-                        You are adept at using online resources to find relevant information quickly.
-                        You are looking for potential healthcare provider clients similar to {client}
-                        that your company can pitch your platform to and sign them.""",
-            tools=[self.serper_tool],
-            allow_delegation=False
-        )
+# Researcher Agent function
+def create_researcher_agent(query):
+    serper_tool = SerperDevTool()
+    return Agent(
+        role='Internet Researcher',
+        goal=f'Find similar healthcare provider companies using the query: {query}',
+        backstory="""You work in the marketing team of a digital healthcare company.
+                    You are adept at using online resources to find relevant information quickly.
+                    You are looking for potential healthcare provider clients similar to {client}
+                    that your company can pitch your platform to and sign them.""",
+        tools=[serper_tool],
+        allow_delegation=False
+    )
