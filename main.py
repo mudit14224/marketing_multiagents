@@ -4,6 +4,10 @@ from langchain_openai import ChatOpenAI
 import os
 os.environ["OPENAI_API_KEY"] = "sk-proj-ITGhy3LPfyvYrxbBci8pT3BlbkFJP5k2rqmOZhAdrOncxu9X"
 os.environ["SERPER_API_KEY"] = "22c46d0058e5749e043b579d50860e011f4358ba"
+os.environ["LANGCHAIN_TRACING_V2"]="true"
+os.environ["LANGCHAIN_ENDPOINT"]="https://api.smith.langchain.com"
+os.environ["LANGCHAIN_API_KEY"]="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"
+os.environ["LANGCHAIN_PROJECT"]="marketing-crew"
 # os.environ["OPENAI_MODEL_NAME"] = "gpt-4o"
 from crewai_tools import SerperDevTool, ScrapeWebsiteTool, WebsiteSearchTool
 from pydantic import BaseModel, Field
@@ -13,12 +17,7 @@ from agents import MarketingAgents
 from tasks import Tasks
 from agents import create_researcher_agent
 
-
-
-if __name__ == '__main__':
-    # url for finding similar providers
-    url = 'https://www.sutterhealth.org/'
-
+def run_crews(url, client, search_criteria):
     # Define the tools
     serper_tool = SerperDevTool()
     scrape_tool = ScrapeWebsiteTool(website_url=url)
@@ -45,9 +44,6 @@ if __name__ == '__main__':
     retry_count = 0
     search_queries = None
 
-    client = 'Sutter Health'
-    search_criteria = 'provider speciality and location'
-
     while retry_count < max_retries:
         search_queries = initial_crew.kickoff(inputs={'client': client, 'search_criteria': search_criteria})
         json_queries = json.loads(search_queries)
@@ -62,8 +58,8 @@ if __name__ == '__main__':
     if not search_queries:
         raise ValueError("Failed to generate search queries in the correct format after multiple retries.")
     
-    print("HERE ARE THE FINAL SEARCH QUERIES: \n")
-    print(search_queries)
+    # print("HERE ARE THE FINAL SEARCH QUERIES: \n")
+    # print(search_queries)
 
     # Get the search tasks
     search_tasks, consolidate_results_task = tasks.create_search_tasks(create_researcher_agent, consolidator, search_queries)
@@ -78,6 +74,16 @@ if __name__ == '__main__':
     # Kickoff the final crew to execute the search and consolidation tasks
     final_result = final_crew.kickoff()
 
-    print("FINAL RESULT: \n")
-    print(final_result)
+    # print("FINAL RESULT: \n")
+    # print(final_result)
+
+    return final_result
+
+
+if __name__ == '__main__':
+    # url for finding similar providers
+    url = 'https://www.sutterhealth.org/'
+    client = 'Sutter Health'
+    search_criteria = 'provider speciality and location'
+    run_crews(url, client, search_criteria)
 
