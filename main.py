@@ -2,8 +2,6 @@
 from crewai import Agent, Task, Crew, Process
 from langchain_openai import ChatOpenAI
 import os
-os.environ["OPENAI_API_KEY"] = "sk-proj-ITGhy3LPfyvYrxbBci8pT3BlbkFJP5k2rqmOZhAdrOncxu9X"
-os.environ["SERPER_API_KEY"] = "22c46d0058e5749e043b579d50860e011f4358ba"
 os.environ["LANGCHAIN_TRACING_V2"]="true"
 os.environ["LANGCHAIN_ENDPOINT"]="https://api.smith.langchain.com"
 os.environ["LANGCHAIN_API_KEY"]="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"

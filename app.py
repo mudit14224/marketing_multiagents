@@ -8,4 +8,4 @@ def run_agents(url, client, search_criteria):
 
 demo = gr.Interface(fn=run_agents, inputs=["textbox", "textbox", "textbox"], outputs="textbox")
     
-demo.launch(share=True) 
+demo.launch(server_name="0.0.0.0", server_port=7860) 
