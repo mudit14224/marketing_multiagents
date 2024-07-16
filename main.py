@@ -1,19 +1,13 @@
 # Imports
-from crewai import Agent, Task, Crew, Process
-from langchain_openai import ChatOpenAI
-import os
-os.environ["LANGCHAIN_TRACING_V2"]="true"
-os.environ["LANGCHAIN_ENDPOINT"]="https://api.smith.langchain.com"
-os.environ["LANGCHAIN_API_KEY"]="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"
-os.environ["LANGCHAIN_PROJECT"]="marketing-crew"
-# os.environ["OPENAI_MODEL_NAME"] = "gpt-4o"
+from crewai import Crew, Process
+from dotenv import load_dotenv
 from crewai_tools import SerperDevTool, ScrapeWebsiteTool, WebsiteSearchTool
-from pydantic import BaseModel, Field
-from crewai_tools import tool
 import json
 from agents import MarketingAgents
 from tasks import Tasks
 from agents import create_researcher_agent
+
+load_dotenv()
 
 def run_crews(url, client, search_criteria):
     # Define the tools

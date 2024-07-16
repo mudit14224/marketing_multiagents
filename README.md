@@ -31,9 +31,21 @@ Make sure you have Python installed. This project is compatible with Python 3.10
     pip install -r requirements.txt
     ```
 
+3. Create a `.env` file in the root directory of the project and add your API keys and other environment variables. Here is an example:
+
+    ```plaintext
+    OPENAI_API_KEY=your-openai-api-key
+    SERPER_API_KEY=your-serper-api-key
+    LANGCHAIN_TRACING_V2=true
+    LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
+    LANGCHAIN_API_KEY=your-langchain-api-key
+    LANGCHAIN_PROJECT=marketing-crew
+    OPENAI_MODEL_NAME=gpt-4o
+    ```
+
 ### Running the Application
 
-After installing the necessary libraries, you can run the application with:
+After installing the necessary libraries and setting up the `.env` file, you can run the application with:
 
     ```bash
     python app.py
@@ -68,7 +80,7 @@ This project is licensed under the MIT License. See the `LICENSE` file for more 
 
 ## Contact
 
-For any inquiries or feedback, please contact [muditjindal2025@u.northwestern.edu].
+For any inquiries or feedback, please contact [muditjindal2025@u.northwestern.edu] or [namangarg2025@u.northwestern.edu].
 
 ---
 
