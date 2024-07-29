@@ -1,6 +1,6 @@
 # Imports
-from crewai import Agent, Task, Crew, Process
-from crewai_tools import SerperDevTool, ScrapeWebsiteTool, WebsiteSearchTool
+from crewai import Agent
+from crewai_tools import SerperDevTool
 
 
 class MarketingAgents: 
