@@ -3,9 +3,10 @@ from crewai import Crew, Process
 from dotenv import load_dotenv
 from crewai_tools import SerperDevTool, ScrapeWebsiteTool, WebsiteSearchTool
 import json
-from agents import MarketingAgents
-from tasks import Tasks
+from agents import MarketingAgents, ContactSearchAgents
+from tasks import Tasks, ContactSearchTasks
 from agents import create_researcher_agent
+from utils import extract_json_from_string, json_to_dataframe
 
 load_dotenv()
 
@@ -71,11 +72,34 @@ def run_crews(url, client, search_criteria):
 
     return final_result
 
+def run_contact_search_crew(client):
+    # Get the contact search agents
+    agents = ContactSearchAgents()
+    search_agent, scraper_agent, contact_consolidator = agents.create_contact_search_agents()
+    # Get the tasks
+    contact_tasks = ContactSearchTasks(search_agent, scraper_agent, contact_consolidator)
+    contact_search_task, web_scraping_task, contact_consolidation_task = contact_tasks.create_tasks()
+
+    # Define the crew
+    crew = Crew(
+    agents=[search_agent, scraper_agent, contact_consolidator], 
+    tasks=[contact_search_task, web_scraping_task, contact_consolidation_task],
+    process=Process.sequential
+    )
+
+    result = crew.kickoff(inputs={'client': client})
+    json_out = extract_json_from_string(result)
+    print(json_out)
+    df = json_to_dataframe(json_out)
+    return json_out
+
 
 if __name__ == '__main__':
     # url for finding similar providers
     url = 'https://www.sutterhealth.org/'
     client = 'Sutter Health'
     search_criteria = 'provider speciality and location'
-    run_crews(url, client, search_criteria)
+    # run_crews(url, client, search_criteria)
+    run_contact_search_crew(client)
+
 
